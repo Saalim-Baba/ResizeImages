@@ -44,7 +44,7 @@ def crop_image():
     new_size = (int(width_config.get()), int(height_config.get()))
     resized_image = image.resize(new_size, Image.LANCZOS)
 
-    resized_image_path = askopenfilename()
+    resized_image_path = askdirectory()
     resized_image.save(resized_image_path)
 
 
