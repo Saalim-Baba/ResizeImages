@@ -50,6 +50,6 @@ def crop_image():
 
 run_button = customtkinter.CTkButton(master=frame, text="Crop", command=crop_image)
 run_button.pack(pady=10, padx=20)
-print(width_config, height_config)
+
 
 root.mainloop()
