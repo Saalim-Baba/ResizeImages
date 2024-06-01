@@ -16,13 +16,18 @@ label.pack(pady=20)
 
 
 def choose_file():
-    global filename
+    global panel, filename
     filename = askopenfilename()
     if filename:
-        img = ImageTk.Image.open(filename)
-        img = customtkinter.CTkImage(dark_image=img, size=(img.width // 2, img.height // 2))
-        panel = customtkinter.CTkLabel(root, image=img, text="")
-        panel.pack(side="bottom", fill="both", expand="yes")
+        img = Image.open(filename)
+        img_resized = img.resize((img.width // 2, img.height // 2))
+        img_tk = customtkinter.CTkImage(dark_image=img_resized, size=(img_resized.width, img_resized.height))
+        if panel:
+            panel.destroy()
+        panel = customtkinter.CTkLabel(root, image=img_tk.subsample(3, 3) , text="")
+        panel.image = img_tk
+        panel.pack(side="bottom", fill="", expand="yes")
+panel = None
 
 
 image_choose = customtkinter.CTkButton(master=frame, text="Choose File", command=choose_file)
