@@ -1,6 +1,7 @@
 import customtkinter
 from PIL import ImageTk, Image
 from tkinter.filedialog import askopenfilename
+from customtkinter import filedialog
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -17,11 +18,11 @@ label.pack(pady=20)
 def choose_file():
     global filename
     filename = askopenfilename()
-    img = ImageTk.Image.open(filename)
-    img = customtkinter.CTkImage(dark_image=img, size=(img.width // 2, img.height // 2))
-    panel = customtkinter.CTkLabel(root, image=img, text="")
-    panel.pack(side="bottom", fill="both", expand="yes")
-
+    if filename:
+        img = ImageTk.Image.open(filename)
+        img = customtkinter.CTkImage(dark_image=img, size=(img.width // 2, img.height // 2))
+        panel = customtkinter.CTkLabel(root, image=img, text="")
+        panel.pack(side="bottom", fill="both", expand="yes")
 
 
 image_choose = customtkinter.CTkButton(master=frame, text="Choose File", command=choose_file)
@@ -43,13 +44,12 @@ def crop_image():
     image = Image.open(image_path)
     new_size = (int(width_config.get()), int(height_config.get()))
     resized_image = image.resize(new_size, Image.LANCZOS)
-
-    resized_image_path = askdirectory()
-    resized_image.save(resized_image_path)
-
-
+    rgb_im = resized_image.convert('RGB')
+    save_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG files", "*.jpg"), ("PNG files", "*.png")])
+    if save_path:
+        rgb_im.save(save_path)
+    root.destroy()
 run_button = customtkinter.CTkButton(master=frame, text="Crop", command=crop_image)
 run_button.pack(pady=10, padx=20)
-
 
 root.mainloop()
