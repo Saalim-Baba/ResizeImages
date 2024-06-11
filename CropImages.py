@@ -8,7 +8,7 @@ customtkinter.set_default_color_theme("dark-blue")
 
 root = customtkinter.CTk()
 root.geometry("500x500")
-
+root.eval('tk::PlaceWindow . center')
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=20, fill="both", expand=True)
 label = customtkinter.CTkLabel(master=frame, text="Crop your image", font=("Roboto", 20, "underline"))
@@ -20,13 +20,18 @@ def choose_file():
     filename = askopenfilename()
     if filename:
         img = Image.open(filename)
-        img_resized = img.resize((img.width // 2, img.height // 2))
+        if img.width >= img.height:
+            ratio = img.height / img.width
+            img_resized = img.resize((250, int(250 * ratio)))
+        if img.width <= img.height:
+            ratio = img.width / img.height
+            img_resized = img.resize((int(250 * ratio), 250))
         img_tk = customtkinter.CTkImage(dark_image=img_resized, size=(img_resized.width, img_resized.height))
         if panel:
             panel.destroy()
-        panel = customtkinter.CTkLabel(root, image=img_tk.subsample(3, 3) , text="")
+        panel = customtkinter.CTkLabel(root, image=img_tk, text="")
         panel.image = img_tk
-        panel.pack(side="bottom", fill="", expand="yes")
+        panel.pack(side="bottom", fill="both", expand="yes")
 panel = None
 
 
@@ -53,8 +58,9 @@ def crop_image():
     save_path = filedialog.asksaveasfilename(defaultextension=".jpg", filetypes=[("JPEG files", "*.jpg"), ("PNG files", "*.png")])
     if save_path:
         rgb_im.save(save_path)
-    root.destroy()
 run_button = customtkinter.CTkButton(master=frame, text="Crop", command=crop_image)
 run_button.pack(pady=10, padx=20)
 
 root.mainloop()
+
+
