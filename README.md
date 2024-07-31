@@ -18,7 +18,7 @@ CropImages is a Python application designed to crop images using a CustomTkinter
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/milaasHD/CropImages.git
+    git clone https://github.com/Saalim-Baba/CropImages.git
     ```
 
 2. Navigate to the project directory:
